@@ -1,0 +1,54 @@
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+ <channel>
+   <title>Categories on Anestis&#39; notes</title>
+   <link>http://notes.georgiadis.online/categories/</link>
+   <description>Recent content in Categories on Anestis&#39; notes</description>
+   <generator>Hugo -- gohugo.io</generator>
+   <language>en-us</language>
+   <lastBuildDate>Sun, 02 Aug 2020 13:39:02 +0300</lastBuildDate>
+   
+       <atom:link href="http://notes.georgiadis.online/categories/index.xml" rel="self" type="application/rss+xml" />
+   
+   
+     <item>
+       <title>Setting up Hugo for GitHub hosting</title>
+       <link>http://notes.georgiadis.online/posts/setting-up-hugo-github/</link>
+       <pubDate>Sun, 02 Aug 2020 13:39:02 +0300</pubDate>
+       
+       <guid>http://notes.georgiadis.online/posts/setting-up-hugo-github/</guid>
+       <description>&lt;h1 id=&#34;hello-world&#34;&gt;Hello, world!&lt;/h1&gt;
+&lt;p&gt;I&amp;rsquo;ve been meaning to setup a technical blog as the place to publish some of the notes I&amp;rsquo;ve been
+traditionally gathering in Evernote notebooks. I&amp;rsquo;m also a huge fan of Inception. So here are the
+steps you need to take in order to use Hugo to publish a technical blog on GitHub pages.&lt;/p&gt;
+&lt;h2 id=&#34;why-hugo&#34;&gt;Why Hugo?&lt;/h2&gt;
+&lt;p&gt;Hugo recently came up on my Twitter feed (which also kickstarted my latest attempt on public technical
+blogging). I also dislike Ruby and all its derivatives, so Jekyll was out of the question. 😄&lt;/p&gt;
+&lt;h2 id=&#34;setup-on-mac&#34;&gt;Setup on Mac&lt;/h2&gt;
+&lt;p&gt;I use Homebrew on my Mac, so setting up the client-side was all about following
+&lt;a href=&#34;https://gohugo.io/getting-started/installing/#macos&#34;&gt;the relevant instructions&lt;/a&gt;.
+After that I used the &lt;a href=&#34;https://gohugo.io/getting-started/quick-start/&#34;&gt;Quickstart guide&lt;/a&gt;. I&amp;rsquo;m giving
+VS Code another go, so installed a few extensions (Hugo Language And Syntax Support, Better TOML)
+along with the IntelliJ IDEA Keybindings to assist the muscle memory.&lt;/p&gt;
+&lt;h2 id=&#34;setup-on-github&#34;&gt;Setup on GitHub&lt;/h2&gt;
+&lt;p&gt;I chose to publish the blog as a user site (see &lt;a href=&#34;https://docs.github.com/en/github/working-with-github-pages/about-github-pages#types-of-github-pages-sites&#34;&gt;Types of GitHub Pages sites&lt;/a&gt;)
+, so I followed again the Hugo documentation on how to &lt;a href=&#34;https://gohugo.io/hosting-and-deployment/hosting-on-github/&#34;&gt;Host on GitHub&lt;/a&gt;. Briefly:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Created a private &lt;code&gt;blog&lt;/code&gt; repository that is tracking Hugo’s content and other source files&lt;/li&gt;
+&lt;li&gt;Created &lt;code&gt;mranest.github.io&lt;/code&gt; repository that is added under &lt;code&gt;public&lt;/code&gt; folder as a submodule&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I also chose to use a custom domain for the blog and followed the corresponding documentation for
+&lt;a href=&#34;https://docs.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site&#34;&gt;Managing a custom domain for your GitHub Pages site&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;other-links&#34;&gt;Other links&lt;/h2&gt;
+&lt;p&gt;Here are some other links, and some TODO items for future improvements.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/spech66/hugo-best-practices&#34;&gt;Hugo best practices&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.webfx.com/tools/emoji-cheat-sheet/&#34;&gt;Emoji cheat sheet&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gohugo.io/content-management/syntax-highlighting/#list-of-chroma-highlighting-languages&#34;&gt;List of Chrome Highlighting Languages&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aaronluna.dev/blog/add-copy-button-to-code-blocks-hugo-chroma/&#34;&gt;Hugo: Add Copy-to-Clipboard Button to Code Blocks with Vanilla JS&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+     </item>
+   
+ </channel>
+</rss>

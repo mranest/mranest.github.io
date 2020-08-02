@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://notes.georgiadis.online/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/categories/blog/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/categories/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/github/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/hugo/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/posts/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/posts/setting-up-hugo-github/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/</loc>
+    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+  </url>
+  
+</urlset>
