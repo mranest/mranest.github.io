@@ -7,7 +7,7 @@
   <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="Technical blog of Anestis Georgiadis" />
-<meta name="author" content="" /><meta property="og:title" content="Openshift 4.x UPI on vSphere using Terraform" />
+<meta name="author" content="Anestis Georgiadis" /><meta property="og:title" content="Openshift 4.x UPI on vSphere using Terraform" />
 <meta property="og:description" content="Installing OpenShift 4.x has become massively easier and more straightforward after the CoreOS acquisition from RedHat and the inclusion of CoreOS RHCOS in the list of supported OSes. vSphere has also been a supported platform for deployment since the initial versions, but up until 4.5 it has required a number of manual steps in order to complete the installation.
 Turns out complaints of RedHat customers running vSphere have led to Redhat offering an installer-provisioned infrastructure (aka IPI), starting with v4." />
 <meta property="og:type" content="article" />
@@ -39,6 +39,21 @@ Turns out complaints of RedHat customers running vSphere have led to Redhat offe
             </h1>
 
       <ul id="social-media">
+             <li>
+               <a href="https://github.com/mranest" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/mranest" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://linkedin.com/in/mranest" title="LinkedIn">
+               <i class="fab fa-linkedin fa-lg"></i>
+               </a>
+             </li>
       </ul>
       
     </header>
@@ -224,8 +239,7 @@ RHCOS VM then the following highlighted changes would create file
 appropriate static routes next to the <code>ignition.tf</code> script)::</p>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
 </span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
 </span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
 </span></span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
@@ -252,8 +266,7 @@ appropriate static routes next to the <code>ignition.tf</code> script)::</p>
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-terraform" data-lang="terraform"><span style="color:#66d9ef">
-</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;ignition_file&#34;</span> <span style="color:#e6db74">&#34;static_routes&#34;</span> {
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-terraform" data-lang="terraform"><span style="display:block;width:100%;background-color:#3c3d38"><span style="color:#66d9ef">data</span> <span style="color:#e6db74">&#34;ignition_file&#34;</span> <span style="color:#e6db74">&#34;static_routes&#34;</span> {
 </span><span style="display:block;width:100%;background-color:#3c3d38">  <span style="color:#a6e22e">for_each</span> = var.<span style="color:#a6e22e">hostnames_ip_addresses</span>
 </span><span style="display:block;width:100%;background-color:#3c3d38">
 </span><span style="display:block;width:100%;background-color:#3c3d38">  <span style="color:#a6e22e">filesystem</span> = <span style="color:#e6db74">&#34;root&#34;</span>
@@ -333,6 +346,19 @@ CSRs).</p>
     </footer>
 </div>
 <script src="/js/scripts.js"></script>
+
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-174365433-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
 
 </body>
 
