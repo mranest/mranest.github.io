@@ -4,16 +4,51 @@
   
   <url>
     <loc>http://notes.georgiadis.online/</loc>
-    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://notes.georgiadis.online/categories/blog/</loc>
-    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
   </url>
   
   <url>
     <loc>http://notes.georgiadis.online/categories/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/posts/openshift4-upi-vsphere-terraform/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/categories/openshift-4/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/posts/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/terraform/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/upi/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/tags/vsphere/</loc>
+    <lastmod>2020-08-03T11:24:46+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://notes.georgiadis.online/categories/blog/</loc>
     <lastmod>2020-08-02T13:39:02+03:00</lastmod>
   </url>
   
@@ -28,17 +63,7 @@
   </url>
   
   <url>
-    <loc>http://notes.georgiadis.online/posts/</loc>
-    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
-  </url>
-  
-  <url>
     <loc>http://notes.georgiadis.online/posts/setting-up-hugo-github/</loc>
-    <lastmod>2020-08-02T13:39:02+03:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://notes.georgiadis.online/tags/</loc>
     <lastmod>2020-08-02T13:39:02+03:00</lastmod>
   </url>
   
