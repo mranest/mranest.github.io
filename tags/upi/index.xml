@@ -195,6 +195,19 @@ appropriate static routes next to the &lt;code&gt;ignition.tf&lt;/code&gt; scrip
 &lt;p&gt;Wait for the bootstrapping to complete.&lt;/p&gt;
 &lt;h3 id=&#34;run-openshift-install-wait-for-install-complete&#34;&gt;Run &lt;code&gt;openshift-install wait-for install-complete&lt;/code&gt;&lt;/h3&gt;
 &lt;p&gt;Wait for the cluster install to finish. Enjoy your new OpenShift cluster.&lt;/p&gt;
+&lt;h3 id=&#34;adding-new-rhcos-nodes&#34;&gt;Adding new RHCOS nodes&lt;/h3&gt;
+&lt;p&gt;There are a number of RedHat knowledge base articles on how to add new RHCOS nodes (requires
+RedHat subscription):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://access.redhat.com/solutions/4246261&#34;&gt;How to add OpenShift 4 RHCOS Worker Nodes in UPI in new installations (&amp;lt; 24 hours)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://access.redhat.com/solutions/4799921&#34;&gt;Adding worker nodes to the OCP 4 UPI cluster existing 24+ hours&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I can happily report that none of these are required when running OpenShift 4.5+. You need only
+revisit &lt;code&gt;terraform.tfvars&lt;/code&gt; configuration file, add IPs to the class of nodes you want to scale
+(&lt;code&gt;control_plane_ip_addresses&lt;/code&gt;, &lt;code&gt;infra_ip_addresses&lt;/code&gt; or &lt;code&gt;compute_ip_addresses&lt;/code&gt;) and re-run
+&lt;code&gt;terraform apply&lt;/code&gt;. The new nodes will be created, they will use the machine config provisioning
+API, received the latest configuration and join the cluster (take care to approve the corresponding
+CSRs).&lt;/p&gt;
 </description>
      </item>
    
