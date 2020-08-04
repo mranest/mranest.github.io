@@ -112,7 +112,9 @@ and other supported customizations.&lt;/p&gt;
 &lt;p&gt;The three ignition files, &lt;code&gt;bootstrap.ign&lt;/code&gt;, &lt;code&gt;master.ign&lt;/code&gt; and &lt;code&gt;worker.ign&lt;/code&gt;, will be created.&lt;/p&gt;
 &lt;p&gt;Don&amp;rsquo;t do any of the steps described in the
 &lt;a href=&#34;https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere.html#installation-vsphere-machines_installing-vsphere&#34;&gt;Creating Red Hat Enterprise Linux CoreOS (RHCOS) machines in vSphere&lt;/a&gt;
-documentation section, as terraform will be used to create all the VMs required.&lt;/p&gt;
+documentation section, as terraform will be used to create all the VMs required. Also note that
+terraform has the ability to inject the complete &lt;code&gt;bootstrap.ign&lt;/code&gt; file contents as guestinfo
+parameters in vSphere, so &lt;code&gt;append-bootstrap.ign&lt;/code&gt; workaround through an HTTP server is not required.&lt;/p&gt;
 &lt;h3 id=&#34;create-a-terraformtfvars-configuraton-file&#34;&gt;Create a &lt;code&gt;terraform.tfvars&lt;/code&gt; configuraton file&lt;/h3&gt;
 &lt;p&gt;There is an example &lt;code&gt;terraform.tfvars&lt;/code&gt; file in this directory named &lt;code&gt;terraform.tfvars.example&lt;/code&gt;. All
 variables not preceded with &lt;code&gt;#&lt;/code&gt; need their value properly set (some sample values are provided),

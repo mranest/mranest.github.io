@@ -234,7 +234,9 @@ and other supported customizations.</p>
 <p>The three ignition files, <code>bootstrap.ign</code>, <code>master.ign</code> and <code>worker.ign</code>, will be created.</p>
 <p>Don&rsquo;t do any of the steps described in the
 <a href="https://docs.openshift.com/container-platform/4.5/installing/installing_vsphere/installing-vsphere.html#installation-vsphere-machines_installing-vsphere">Creating Red Hat Enterprise Linux CoreOS (RHCOS) machines in vSphere</a>
-documentation section, as terraform will be used to create all the VMs required.</p>
+documentation section, as terraform will be used to create all the VMs required. Also note that
+terraform has the ability to inject the complete <code>bootstrap.ign</code> file contents as guestinfo
+parameters in vSphere, so <code>append-bootstrap.ign</code> workaround through an HTTP server is not required.</p>
 <h3 id="create-a-terraformtfvars-configuraton-file">Create a <code>terraform.tfvars</code> configuraton file</h3>
 <p>There is an example <code>terraform.tfvars</code> file in this directory named <code>terraform.tfvars.example</code>. All
 variables not preceded with <code>#</code> need their value properly set (some sample values are provided),
