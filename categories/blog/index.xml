@@ -234,7 +234,9 @@ along with the IntelliJ IDEA Keybindings to assist the muscle memory.&lt;/p&gt;
 , so I followed again the Hugo documentation on how to &lt;a href=&#34;https://gohugo.io/hosting-and-deployment/hosting-on-github/&#34;&gt;Host on GitHub&lt;/a&gt;. Briefly:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Created a private &lt;code&gt;blog&lt;/code&gt; repository that is tracking Hugo’s content and other source files&lt;/li&gt;
-&lt;li&gt;Created &lt;code&gt;mranest.github.io&lt;/code&gt; repository that is added under &lt;code&gt;public&lt;/code&gt; folder as a submodule&lt;/li&gt;
+&lt;li&gt;Created &lt;code&gt;mranest.github.io&lt;/code&gt; repository &lt;del&gt;that is added under &lt;code&gt;public&lt;/code&gt; folder as a submodule&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;Setup a workflow action, as described in
+&lt;a href=&#34;https://ruddra.com/hugo-deploy-static-page-using-github-actions/&#34;&gt;Hugo: Deploy Static Site using GitHub Actions&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;I also chose to use a custom domain for the blog and followed the corresponding documentation for
 &lt;a href=&#34;https://docs.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site&#34;&gt;Managing a custom domain for your GitHub Pages site&lt;/a&gt;.&lt;/p&gt;
