@@ -6,10 +6,278 @@
    <description>Recent content in openshift-4 on Anestis&#39; notes</description>
    <generator>Hugo -- gohugo.io</generator>
    <language>en-us</language>
-   <lastBuildDate>Mon, 03 Aug 2020 11:24:46 +0300</lastBuildDate>
+   <lastBuildDate>Wed, 05 Aug 2020 16:19:32 +0300</lastBuildDate>
    
        <atom:link href="http://notes.georgiadis.online/categories/openshift-4/index.xml" rel="self" type="application/rss+xml" />
    
+   
+     <item>
+       <title>Using Cassandra Operator with Openshift 4.x</title>
+       <link>http://notes.georgiadis.online/posts/cassandra-operator-openshift4/</link>
+       <pubDate>Wed, 05 Aug 2020 16:19:32 +0300</pubDate>
+       
+       <guid>http://notes.georgiadis.online/posts/cassandra-operator-openshift4/</guid>
+       <description>&lt;p&gt;I&amp;rsquo;ve been running Cassandra on Openshift for some time now through a homebrew stateful set, but it&amp;rsquo;s
+a tedious process, and prone to failures. Naturally one of the first things I tried with OpenShift
+4.x is to make use of &lt;a href=&#34;https://github.com/instaclustr/cassandra-operator&#34;&gt;Instaclustr Cassandra Operator&lt;/a&gt;
+to automate the provisioning of Cassandra clusters.&lt;/p&gt;
+&lt;h2 id=&#34;deployment&#34;&gt;Deployment&lt;/h2&gt;
+&lt;p&gt;Just follow the instructions for how to
+&lt;a href=&#34;https://github.com/instaclustr/cassandra-operator/wiki/Installation-and-deployment#deploy-the-operator&#34;&gt;Deploy the Operator&lt;/a&gt;. First deploy the custom resource descriptors:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc apply -f deploy/crds.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then the operator itself:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc apply -f deploy/bundle.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After the operator pod starts up, I tried to spin up a small 3-node Cassandra cluster using the
+following YAML:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;apiVersion&lt;/span&gt;: cassandraoperator.instaclustr.com/v1alpha1
+&lt;span style=&#34;color:#66d9ef&#34;&gt;kind&lt;/span&gt;: CassandraDataCenter
+&lt;span style=&#34;color:#66d9ef&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;name&lt;/span&gt;: test-cluster-dc1
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;labels&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;app&lt;/span&gt;: cassandra
+&lt;span style=&#34;color:#66d9ef&#34;&gt;datacenter&lt;/span&gt;: dc1
+&lt;span style=&#34;color:#66d9ef&#34;&gt;cluster&lt;/span&gt;: test-cluster
+&lt;span style=&#34;color:#66d9ef&#34;&gt;spec&lt;/span&gt;:
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;prometheusSupport&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;optimizeKernelParams&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;serviceAccountName&lt;/span&gt;: cassandra
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;nodes&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;cassandraImage&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;gcr.io/cassandra-operator/cassandra-3.11.6:latest&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;sidecarImage&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;gcr.io/cassandra-operator/cassandra-sidecar:latest&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;imagePullPolicy&lt;/span&gt;: Always
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;imagePullSecrets&lt;/span&gt;:
+    - &lt;span style=&#34;color:#66d9ef&#34;&gt;name&lt;/span&gt;: regcred
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;resources&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;limits&lt;/span&gt;:
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;memory&lt;/span&gt;: 2Gi
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;requests&lt;/span&gt;:
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;memory&lt;/span&gt;: 2Gi
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;sidecarResources&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;limits&lt;/span&gt;:
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;memory&lt;/span&gt;: 512Mi
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;requests&lt;/span&gt;:
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;memory&lt;/span&gt;: 512Mi
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;dataVolumeClaimSpec&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;accessModes&lt;/span&gt;:
+      - ReadWriteOnce
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;storageClassName&lt;/span&gt;: thick
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;resources&lt;/span&gt;:
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;requests&lt;/span&gt;:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;storage&lt;/span&gt;: 5Gi
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;cassandraAuth&lt;/span&gt;:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;authenticator&lt;/span&gt;: PasswordAuthenticator
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;authorizer&lt;/span&gt;: CassandraAuthorizer
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;roleManager&lt;/span&gt;: CassandraRoleManager
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Easy right?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc get pod
+NAME                                 READY   STATUS             RESTARTS   AGE
+cassandra-operator-55d759bcd-6h5sm   1/1     Running            &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;          47s
+cassandra-test-cluster-dc1-rack1-0   1/2     CrashLoopBackOff   &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;          22s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;CrashLoopBackOff. Let&amp;rsquo;s see if we can get any meaningful error from the logs:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc logs cassandra-test-cluster-dc1-rack1-0 -c cassandra
++ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;[&amp;#39;&lt;/span&gt; unset &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; true &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;]&amp;#39;&lt;/span&gt;
++ exec /bin/bash -xue /usr/bin/entry-point /tmp/operator-config /tmp/cassandra-rack-config
++ &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; config_directory in &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$@&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
++ cd /tmp/operator-config
++ find -L . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;..*&amp;#39;&lt;/span&gt; -prune -o &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;(&amp;#39;&lt;/span&gt; -type f -print0 &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;
++ cpio -pmdLv0 /etc/cassandra
+cpio: /etc/cassandra/./cassandra.yaml.d/001-operator-overrides.yaml: Cannot open: Permission denied
+cpio: /etc/cassandra/./jvm.options.d/001-jvm-memory-gc.options: Cannot open: Permission denied
+cpio: /etc/cassandra/./cassandra-env.sh.d/001-cassandra-exporter.sh: Cannot open: Permission denied
+&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; blocks
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Well, dammit. Permission denied. Aren&amp;rsquo;t containers supposed to be solving these problems? Let&amp;rsquo;s work
+the problem a little further:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc debug pod/cassandra-test-cluster-dc1-rack1-0
+Defaulting container name to cassandra.
+Use &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;oc describe pod/cassandra-test-cluster-dc1-rack1-0-debug -n akka-ledger&amp;#39;&lt;/span&gt; to see all of the containers in this pod.
+
+Starting pod/cassandra-test-cluster-dc1-rack1-0-debug ...
+Pod IP: 10.128.4.38
+If you don&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&amp;#39;&lt;/span&gt;t see a command prompt, try pressing enter.
+
+$ whoami
+&lt;span style=&#34;color:#ae81ff&#34;&gt;1000690000&lt;/span&gt;
+$ cat &amp;gt; /etc/cassandra/hello_world
+/bin/sh: 3: cannot create /etc/cassandra/hello_world: Permission denied
+$ ls -l /etc/| grep cassandra
+drwxr-xr-x. &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; cassandra cassandra   &lt;span style=&#34;color:#ae81ff&#34;&gt;267&lt;/span&gt; Jul &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; 14:14 cassandra
+$ grep cassandra /etc/passwd
+cassandra: x:999:999::/home/cassandra:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So there is the issue. User &lt;strong&gt;cassandra&lt;/strong&gt; (uid &lt;code&gt;999&lt;/code&gt;) owns the &lt;code&gt;/etc/cassandra&lt;/code&gt; folder, but when the
+image is running on OpenShift the user assigned to the pod has uid &lt;code&gt;1000690000&lt;/code&gt;. Going over this
+issue requires understanding of OpenShift SCC and how they can be adjusted.&lt;/p&gt;
+&lt;h2 id=&#34;understanding-service-accounts-and-sccs&#34;&gt;Understanding Service Accounts and SCCs&lt;/h2&gt;
+&lt;p&gt;Security Context Constraints, or SCCs, are the means for administrators in Openshift to control
+permissions for pods. Here are some relevant links:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.openshift.com/container-platform/4.5/authentication/managing-security-context-constraints.html&#34;&gt;Understanding Service Accounts and SCCs&lt;/a&gt; (somewhat outdated)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.openshift.com/container-platform/4.5/authentication/managing-security-context-constraints.html&#34;&gt;Managing Security Context Constraints&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;What we need is to grant the operator the ability to spawn cassandra pods using the uid that is
+baked into the images, instead of randomly getting one in the range assigned in the namespace where
+the operator is running. See for example the namespace configuration I am using:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc describe namespace/akka-ledger
+Name:         akka-ledger
+Labels:       &amp;lt;none&amp;gt;
+Annotations:  openshift.io/description:
+              openshift.io/display-name:
+              openshift.io/requester: AGeorgiadis
+              openshift.io/sa.scc.mcs: s0:c26,c20
+              openshift.io/sa.scc.supplemental-groups: 1000690000/10000
+              openshift.io/sa.scc.uid-range: 1000690000/10000
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;openshift.io/sa.scc.uid-range&lt;/code&gt; annotation is being used to define the range of uids that will be
+used, hence the value of &lt;code&gt;1000690000&lt;/code&gt; that I got.&lt;/p&gt;
+&lt;p&gt;So what can we do? Turns out one of the SCCs defined out of the box on OpenShift is &lt;code&gt;anyuid&lt;/code&gt;, which
+allows the operator to override the uid range defined in the namespace and have the cassandra server
+run as uid &lt;code&gt;999&lt;/code&gt; in the pod. This is an OpenShift specific issue, since I can use the same operator
+in a stock Kubernetes installation without getting any error. We can modify the &lt;code&gt;cassandra&lt;/code&gt; Role that
+has been created and add the following rule to allow use of &lt;code&gt;anyuid&lt;/code&gt; SCC:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;- &lt;span style=&#34;color:#66d9ef&#34;&gt;apiGroups&lt;/span&gt;:
+  - security.openshift.io 
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;resourceNames&lt;/span&gt;:
+  - anyuid
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;resources&lt;/span&gt;:
+  - securitycontextconstraints 
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;verbs&lt;/span&gt;: 
+  - use
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This role is bound to the &lt;code&gt;cassandra&lt;/code&gt; service account which is declared in the pod spec of the
+stateful set that the operator is creating to provision the cassandra server pods.&lt;/p&gt;
+&lt;p&gt;After that, let&amp;rsquo;s monitor the logs again to verify that the pod starts with the correct uid:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;...&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+WARN  &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;main&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; StartupChecks.java:332 Directory /var/lib/cassandra/data doesn&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&amp;#39;&lt;/span&gt;t exist
+ERROR &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;main&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; CassandraDaemon.java:775 Has no permission to create directory /var/lib/cassandra/data
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So the process now succesfully updated the &lt;code&gt;/etc/cassandra&lt;/code&gt; folder, but got a new error after a few
+steps. Again, let&amp;rsquo;s use debug to understand the problem:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc debug pod/cassandra-test-cluster-dc1-rack1-0
+Defaulting container name to cassandra.
+Use &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;oc describe pod/cassandra-test-cluster-dc1-rack1-0-debug -n akka-ledger&amp;#39;&lt;/span&gt; to see all of the containers in this pod.
+
+Starting pod/cassandra-test-cluster-dc1-rack1-0-debug ...
+
+Pod IP: 10.128.4.41
+If you don&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&amp;#39;&lt;/span&gt;t see a command prompt, try pressing enter.
+
+$ whoami
+cassandra
+$ ls -la /var/lib/cassandra
+total &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+drwxr-xr-x. &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; root root  &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt; Aug  &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; 14:31 .
+drwxr-xr-x. &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; root root &lt;span style=&#34;color:#ae81ff&#34;&gt;57&lt;/span&gt; Jul &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; 14:14 ..
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So the pod has been configured with the proper uid. Unfortunately when the PV was mounted the
+permissions set only allow &lt;code&gt;root&lt;/code&gt; to make notifications to the filesystem. In order to resolve this
+the operator would have to specify &lt;code&gt;fsGroup: 999&lt;/code&gt; on the stateful set that is used to provision the
+pods (see e.g. &lt;a href=&#34;https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod&#34;&gt;Set the security context for a Pod&lt;/a&gt;). Can we achieve the same thing without
+requiring changes to the operator code?&lt;/p&gt;
+&lt;p&gt;Turns out, we can. Just create a new SCC that presets the fsGroup to a suitable range. Like for
+example the following one:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;
+&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
+&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 1
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 2
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 3
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 4
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 5
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 6
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 7
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 8
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt; 9
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;10
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;11
+&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;12
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;13
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;14
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;15
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;16
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;17
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;18
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;19
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;20
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;21
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;22
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;23
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;24
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;25
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;26
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;27
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;28
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;29
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;30
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;31
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;32
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;33
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;34
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;35
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;36
+&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f&#34;&gt;37
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;;width:100%&#34;&gt;
+&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;allowHostDirVolumePlugin&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowHostIPC&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowHostNetwork&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowHostPID&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowHostPorts&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowPrivilegeEscalation&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowPrivilegedContainer&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;allowedCapabilities&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;apiVersion&lt;/span&gt;: security.openshift.io/v1
+&lt;span style=&#34;color:#66d9ef&#34;&gt;defaultAddCapabilities&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;fsGroup&lt;/span&gt;:
+&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt;:
+&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;  - &lt;span style=&#34;color:#66d9ef&#34;&gt;min&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;999&lt;/span&gt;
+&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;max&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt;: MustRunAs
+&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;groups&lt;/span&gt;: []
+&lt;span style=&#34;color:#66d9ef&#34;&gt;kind&lt;/span&gt;: SecurityContextConstraints
+&lt;span style=&#34;color:#66d9ef&#34;&gt;metadata&lt;/span&gt;:
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;name&lt;/span&gt;: cassandra
+&lt;span style=&#34;color:#66d9ef&#34;&gt;priority&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;readOnlyRootFilesystem&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;requiredDropCapabilities&lt;/span&gt;:
+- MKNOD
+&lt;span style=&#34;color:#66d9ef&#34;&gt;runAsUser&lt;/span&gt;:
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt;: RunAsAny
+&lt;span style=&#34;color:#66d9ef&#34;&gt;seLinuxContext&lt;/span&gt;:
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt;: MustRunAs
+&lt;span style=&#34;color:#66d9ef&#34;&gt;supplementalGroups&lt;/span&gt;:
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt;: RunAsAny
+&lt;span style=&#34;color:#66d9ef&#34;&gt;users&lt;/span&gt;: []
+&lt;span style=&#34;color:#66d9ef&#34;&gt;volumes&lt;/span&gt;:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- projected
+- secret
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;This is the same as &lt;code&gt;anyuid&lt;/code&gt; SCC, with the highlighted changes applied, in place of a
+&lt;code&gt;type: RunAsAny&lt;/code&gt; policy. Let&amp;rsquo;s edit again the &lt;code&gt;cassandra&lt;/code&gt; role, replace &lt;code&gt;anyuid&lt;/code&gt; with
+&lt;code&gt;cassandra&lt;/code&gt; in &lt;code&gt;resourceNames&lt;/code&gt; list and recreate the datacenter crd cluster definition.&lt;/p&gt;
+&lt;p&gt;After a while all 3 pods have been created correctly:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc get pod
+NAME                                 READY   STATUS              RESTARTS   AGE
+cassandra-operator-55d759bcd-8vtwq   1/1     Running             &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;          23m
+cassandra-test-cluster-dc1-rack1-0   2/2     Running             &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;          3m43s
+cassandra-test-cluster-dc1-rack1-1   2/2     Running             &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;          2m11s
+cassandra-test-cluster-dc1-rack1-2   2/2     Running             &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;          27s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Nodetool status also reports a proper cluster formation:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;❯ oc exec cassandra-test-cluster-dc1-rack1-0 -c cassandra -- nodetool status
+Datacenter: dc1
+&lt;span style=&#34;color:#f92672&#34;&gt;===============&lt;/span&gt;
+Status&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Up/Down
+|/ State&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Normal/Leaving/Joining/Moving
+--  Address      Load       Tokens       Owns &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;effective&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;  Host ID                               Rack
+UN  10.129.4.55  85.2 KiB   &lt;span style=&#34;color:#ae81ff&#34;&gt;256&lt;/span&gt;          69.8%             2495ad71-384a-43fe-996f-65d245c15fe4  rack1
+UN  10.128.4.42  84.79 KiB  &lt;span style=&#34;color:#ae81ff&#34;&gt;256&lt;/span&gt;          65.4%             84011ee3-0dc5-482e-90ab-d06cf0844155  rack1
+UN  10.129.2.13  15.5 KiB   &lt;span style=&#34;color:#ae81ff&#34;&gt;256&lt;/span&gt;          64.8%             12bb34c0-1ac5-49dc-971d-9c0bc1df7a81  rack1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can now follow the rest of the guide.&lt;/p&gt;
+</description>
+     </item>
    
      <item>
        <title>Openshift 4.x UPI on vSphere using Terraform</title>

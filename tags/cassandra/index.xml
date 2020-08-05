@@ -1,14 +1,14 @@
 
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
  <channel>
-   <title>Anestis&#39; notes</title>
-   <link>http://notes.georgiadis.online/</link>
-   <description>Recent content on Anestis&#39; notes</description>
+   <title>cassandra on Anestis&#39; notes</title>
+   <link>http://notes.georgiadis.online/tags/cassandra/</link>
+   <description>Recent content in cassandra on Anestis&#39; notes</description>
    <generator>Hugo -- gohugo.io</generator>
    <language>en-us</language>
    <lastBuildDate>Wed, 05 Aug 2020 16:19:32 +0300</lastBuildDate>
    
-       <atom:link href="http://notes.georgiadis.online/index.xml" rel="self" type="application/rss+xml" />
+       <atom:link href="http://notes.georgiadis.online/tags/cassandra/index.xml" rel="self" type="application/rss+xml" />
    
    
      <item>
