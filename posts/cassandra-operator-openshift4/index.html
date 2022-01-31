@@ -98,6 +98,7 @@ if (!doNotTrack) {
             <time class="post-date" datetime="2020-08-05T16:19:32&#43;03:00">Aug 5, 2020</time>
         </li>
         
+        
         <li>
             Categories:
             <em>
@@ -126,13 +127,14 @@ if (!doNotTrack) {
         </li>
         
 
-        <li>6 minutes read</li>
+        <li>6 minute read</li>
     </ul>
 </aside>
 
     
 
     
+      
 <div class="featured_image">
     <a href="http://notes.georgiadis.online/posts/cassandra-operator-openshift4/" title="Using Cassandra Operator with Openshift 4.x">
         <img src="">
@@ -140,6 +142,7 @@ if (!doNotTrack) {
 </div>
 
 
+    
 
     <p>I&rsquo;ve been running Cassandra on Openshift for some time now through a homebrew stateful set, but it&rsquo;s
 a tedious process, and prone to failures. Naturally one of the first things I tried with OpenShift
@@ -400,6 +403,10 @@ UN  10.129.4.55  85.2 KiB   <span style="color:#ae81ff">256</span>          69.8
 UN  10.128.4.42  84.79 KiB  <span style="color:#ae81ff">256</span>          65.4%             84011ee3-0dc5-482e-90ab-d06cf0844155  rack1
 UN  10.129.2.13  15.5 KiB   <span style="color:#ae81ff">256</span>          64.8%             12bb34c0-1ac5-49dc-971d-9c0bc1df7a81  rack1
 </code></pre></div><p>We can now follow the rest of the guide.</p>
+<h2 id="todo">TODO</h2>
+<ul>
+<li>Enable optimizeKernelParams</li>
+</ul>
 
 
 </article>
@@ -407,12 +414,14 @@ UN  10.129.2.13  15.5 KiB   <span style="color:#ae81ff">256</span>          64.8
 
 <section class="post-nav">
     <ul>
-        
         <li>
+        
             <a href="http://notes.georgiadis.online/posts/openshift4-upi-vsphere-terraform/"><i class="fa fa-chevron-circle-left"></i> Openshift 4.x UPI on vSphere using Terraform</a>
+        
         </li>
+        <li>
         
-        
+        </li>
     </ul>
 </section>
   
@@ -426,9 +435,15 @@ UN  10.129.2.13  15.5 KiB   <span style="color:#ae81ff">256</span>          64.8
 
 </main>
     <footer>
-        <h6> |
-            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
-            <a href="http://notes.georgiadis.online/index.xml">Subscribe </a></h6>
+        <ul>
+            <li>
+                <h6>
+                    Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+                    <a href="http://notes.georgiadis.online/index.xml">Subscribe </a></h6>
+            </li>
+            
+            
+        </ul>
     </footer>
 </div>
 <script src="/js/scripts.js"></script>
@@ -437,13 +452,16 @@ UN  10.129.2.13  15.5 KiB   <span style="color:#ae81ff">256</span>          64.8
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 	ga('create', 'UA-174365433-1', 'auto');
 	
 	ga('send', 'pageview');
 }
 </script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+
 
 
 </body>
